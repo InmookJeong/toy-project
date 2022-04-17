@@ -1,5 +1,6 @@
 package kr.dev_mook.file_manager.service.impl;
 
+import java.nio.file.Paths;
 import java.util.List;
 
 import kr.dev_mook.file_manager.model.File;
@@ -45,14 +46,16 @@ public class FileLocalServiceImpl implements FileLocalService {
 
 	@Override
 	public boolean hasFile(String targetFolderPath, String fileName) {
-		// TODO Auto-generated method stub
-		return false;
+		String filePath = Paths.get(targetFolderPath, fileName).toString();
+		return hasFile(filePath);
 	}
 
 	@Override
 	public boolean hasFile(String absoluteFilePath) {
-		// TODO Auto-generated method stub
-		return false;
+		java.io.File file = Paths.get(absoluteFilePath).toFile();
+		boolean exist = file.exists();
+		if(exist) exist = file.isFile();
+		return exist;
 	}
 
 	@Override
@@ -69,14 +72,16 @@ public class FileLocalServiceImpl implements FileLocalService {
 
 	@Override
 	public boolean hasFolder(String targetFolderPath, String folderName) {
-		// TODO Auto-generated method stub
-		return false;
+		String folderPath = Paths.get(targetFolderPath, folderName).toString();
+		return hasFolder(folderPath);
 	}
 
 	@Override
 	public boolean hasFolder(String absolteFolderPath) {
-		// TODO Auto-generated method stub
-		return false;
+		java.io.File folder = Paths.get(absolteFolderPath).toFile();
+		boolean exist = folder.exists();
+		if(exist) exist = folder.isDirectory();
+		return exist;
 	}
 
 	@Override
