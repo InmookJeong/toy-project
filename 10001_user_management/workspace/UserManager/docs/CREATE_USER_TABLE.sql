@@ -30,7 +30,7 @@ create table User_ (
 -- DB 엔진의 종류와 그 차이점에 대해 학습하자
 -- Unique Index의 최대 길이는 3072
 -- utf8은 3byte를 기준, utf8mb4는 4byte를 기준으로 
---   email 컬럼의 경우 utf8일 때 varchar(1000)이 가능하지만 utf8mb4는 길이가 초과하므로 varchar(750)으로 변경
+-- email 컬럼의 경우 unique-index를 생성할 때 utf8면 varchar(1000)이 가능하지만 utf8mb4는 길이가 초과하므로 varchar(750)으로 변경
 
 ALTER TABLE User_ MODIFY id BIGINT(10) comment '숫자(시퀀스) 형식의 아이디';
 
