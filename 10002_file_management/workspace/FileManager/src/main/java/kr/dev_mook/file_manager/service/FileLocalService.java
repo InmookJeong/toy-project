@@ -35,18 +35,47 @@ public interface FileLocalService {
 	public File updateFolder(File file);
 	
 	/**
-	 * 파일의 아이디를 통해 파일 정보 읽기
+	 * 파일의 아이디를 통해 파일 객체 가져오기
+	 * @param fileId
+	 * @return
+	 */
+	public File getFile(Long fileId);
+	
+	/**
+	 * 파일의 절대 경로를 통해 파일 객체 가져오기
+	 * @param absoluteFilePath
+	 * @return
+	 */
+	public File getFile(String absoluteFilePath);
+	
+	/**
+	 * 파일의 아이디를 통해 파일 내용 읽기
 	 * @param fileId
 	 * @return
 	 */
 	public String readFile(Long fileId);
 	
 	/**
-	 * 파일의 절대 경로를 통해 파일 정보 읽기
+	 * 파일의 절대 경로를 통해 파일 내용 읽기
 	 * @param absoluteFilePath
 	 * @return
 	 */
 	public String readFile(String absoluteFilePath);
+	
+	/**
+	 * 파일의 아이디를 통해 파일에 Content 내용 작성하기
+	 * @param fileId
+	 * @return
+	 */
+	public File writeFile(Long fileId, String content);
+	
+	/**
+	 * 파일의 절대 경로를 통해 파일에 Content 내용 작성하기
+	 * @param absoluteFilePath
+	 * @param content
+	 * @return
+	 */
+	public File writeFile(String absoluteFilePath, String content);
 	
 	/**
 	 * 파일을 생성할 폴더 경로와 파일 이름을 통해 이미 파일이 존재하는지 확인
@@ -68,14 +97,14 @@ public interface FileLocalService {
 	 * @param fileId
 	 * @return
 	 */
-	public File readFolder(Long fileId);
+	public File getFolder(Long fileId);
 	
 	/**
 	 * 폴더의 절대 경로를 통해 폴더 정보 읽기
 	 * @param absoluteFolderPath
 	 * @return
 	 */
-	public File readFolder(String absoluteFolderPath);
+	public File getFolder(String absoluteFolderPath);
 	
 	/**
 	 * 폴더를 생성할 폴더 경로와 폴더 이름을 통해 이미 폴더가 존재하는지 확인
