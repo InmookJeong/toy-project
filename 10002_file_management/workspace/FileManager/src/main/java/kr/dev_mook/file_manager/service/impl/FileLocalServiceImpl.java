@@ -3,8 +3,10 @@ package kr.dev_mook.file_manager.service.impl;
 import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
@@ -81,6 +83,18 @@ public class FileLocalServiceImpl implements FileLocalService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public File getFile(Long fileId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public File getFile(String absoluteFilePath) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	@Override
 	public String readFile(Long fileId) {
@@ -108,6 +122,24 @@ public class FileLocalServiceImpl implements FileLocalService {
 		}
 		return sb.toString();
 	}
+	
+	@Override
+	public File writeFile(Long fileId, String content, boolean override) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public File writeFile(String absoluteFilePath, String content, boolean override) {
+		try(BufferedWriter bw = new BufferedWriter(new FileWriter(absoluteFilePath, override))) {
+			bw.write(content);
+			bw.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		// TODO File Return
+		return null;
+	}
 
 	@Override
 	public boolean hasFile(String targetFolderPath, String fileName) {
@@ -124,13 +156,13 @@ public class FileLocalServiceImpl implements FileLocalService {
 	}
 
 	@Override
-	public File readFolder(Long fileId) {
+	public File getFolder(Long fileId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public File readFolder(String absoluteFolderPath) {
+	public File getFolder(String absoluteFolderPath) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -328,5 +360,4 @@ public class FileLocalServiceImpl implements FileLocalService {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

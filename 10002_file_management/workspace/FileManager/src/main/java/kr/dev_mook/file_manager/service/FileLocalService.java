@@ -65,17 +65,20 @@ public interface FileLocalService {
 	/**
 	 * 파일의 아이디를 통해 파일에 Content 내용 작성하기
 	 * @param fileId
+	 * @param content
+	 * @param override
 	 * @return
 	 */
-	public File writeFile(Long fileId, String content);
+	public File writeFile(Long fileId, String content, boolean override);
 	
 	/**
 	 * 파일의 절대 경로를 통해 파일에 Content 내용 작성하기
 	 * @param absoluteFilePath
 	 * @param content
+	 * @param override
 	 * @return
 	 */
-	public File writeFile(String absoluteFilePath, String content);
+	public File writeFile(String absoluteFilePath, String content, boolean override);
 	
 	/**
 	 * 파일을 생성할 폴더 경로와 파일 이름을 통해 이미 파일이 존재하는지 확인
