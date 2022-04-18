@@ -1,6 +1,12 @@
 package kr.dev_mook.file_manager.service.impl;
 
+import static org.junit.Assert.assertTrue;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -77,15 +83,30 @@ public class FileLocalServiceImpl implements FileLocalService {
 	}
 
 	@Override
-	public File readFile(Long fileId) {
+	public String readFile(Long fileId) {
 		// TODO Auto-generated method stub
-		return null;
+		return readFile("");
 	}
 
 	@Override
-	public File readFile(String absoluteFilePath) {
-		// TODO Auto-generated method stub
-		return null;
+	public String readFile(String absoluteFilePath) {
+		StringBuilder sb = new StringBuilder();
+		try {
+			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(absoluteFilePath), "UTF-8"));
+			
+			String str;
+			String resultStr = "";
+			while((str = br.readLine()) != null) {
+				sb.append(str);
+			}
+			
+			assertTrue(resultStr.equals("Hello World."));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return sb.toString();
 	}
 
 	@Override

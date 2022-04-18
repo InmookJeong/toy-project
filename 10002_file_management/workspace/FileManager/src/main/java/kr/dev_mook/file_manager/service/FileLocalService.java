@@ -39,14 +39,14 @@ public interface FileLocalService {
 	 * @param fileId
 	 * @return
 	 */
-	public File readFile(Long fileId);
+	public String readFile(Long fileId);
 	
 	/**
 	 * 파일의 절대 경로를 통해 파일 정보 읽기
 	 * @param absoluteFilePath
 	 * @return
 	 */
-	public File readFile(String absoluteFilePath);
+	public String readFile(String absoluteFilePath);
 	
 	/**
 	 * 파일을 생성할 폴더 경로와 파일 이름을 통해 이미 파일이 존재하는지 확인
