@@ -11,14 +11,14 @@ public interface FileLocalService {
 	 * @param fileId
 	 * @return
 	 */
-	public File createFile(Long fileId);
+	public File createFile(File file);
 	
 	/**
 	 * 폴더 생성
 	 * @param fileId
 	 * @return
 	 */
-	public File createFolder(Long fileId);
+	public File createFolder(File folder);
 	
 	/**
 	 * 파일 정보 수정

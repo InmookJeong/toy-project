@@ -1,23 +1,67 @@
 package kr.dev_mook.file_manager.service.impl;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import kr.dev_mook.file_manager.model.File;
 import kr.dev_mook.file_manager.service.FileLocalService;
 
 public class FileLocalServiceImpl implements FileLocalService {
+	
+	private static final Logger _logger = LoggerFactory.getLogger(FileLocalServiceImpl.class);
 
 	@Override
-	public File createFile(final Long fileId) {
-		// TODO Auto-generated method stub
-		return null;
+	public File createFile(File file) {
+		File returnFile = null;
+		Path path = Paths.get(file.getPath());
+		try {
+			if(!path.toFile().exists() && path.toFile().isFile()) {
+				Files.createFile(path);
+				_logger.info("##### Success creation file.");
+				_logger.debug("##### Creation File Information");
+				_logger.debug("##### - Name : " + file.getName());
+				_logger.debug("##### - Path : " + file.getPath());
+				_logger.debug("##### - Extention : " + file.getExtension());
+				_logger.debug("##### - Size : " + file.getFileSize());
+				_logger.debug("##### - Owner : " + file.getUserId());
+			}
+			returnFile = file;
+		} catch (IOException e) {
+			_logger.error("##### Failed creation file.");
+			e.printStackTrace();
+		}
+		
+		return returnFile;
 	}
 
 	@Override
-	public File createFolder(Long fileId) {
-		// TODO Auto-generated method stub
-		return null;
+	public File createFolder(File folder) {
+		File returnFolder = null;
+		Path path = Paths.get(folder.getPath());
+		try {
+			if(!path.toFile().exists() && path.toFile().isDirectory()) {
+				Files.createFile(path);
+				_logger.info("##### Success creation folder.");
+				_logger.debug("##### Creation Folder Information");
+				_logger.debug("##### - Name : " + folder.getName());
+				_logger.debug("##### - Path : " + folder.getPath());
+				_logger.debug("##### - Extention : " + folder.getExtension());
+				_logger.debug("##### - Size : " + folder.getFileSize());
+				_logger.debug("##### - Owner : " + folder.getUserId());
+			}
+			returnFolder = folder;
+		} catch (IOException e) {
+			_logger.error("##### Failed creation folder.");
+			e.printStackTrace();
+		}
+		
+		return returnFolder;
 	}
 
 	@Override
