@@ -3,8 +3,12 @@ package kr.dev_mook.file_manager.servie.impl;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -55,6 +59,26 @@ public class FileLocalServiceImplTest {
 			File file = new File(helloFolderPath.toString());
 			assertTrue(file.exists());
 			assertTrue(file.isDirectory());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void readFile() {
+		try {
+			String helloTxtPath = samplePath + "hello.txt";
+			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(helloTxtPath), "UTF-8"));
+			
+			String str;
+			String resultStr = "";
+			while((str = br.readLine()) != null) {
+				resultStr = str;
+			}
+			
+			assertTrue(resultStr.equals("Hello World."));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
