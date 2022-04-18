@@ -4,9 +4,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
@@ -64,6 +66,9 @@ public class FileLocalServiceImplTest {
 		}
 	}
 	
+	/**
+	 * 절대 경로에 대응하는 파일의 내용 읽기
+	 */
 	@Test
 	public void readFile() {
 		try {
@@ -79,6 +84,52 @@ public class FileLocalServiceImplTest {
 			assertTrue(resultStr.equals("Hello World."));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 절대 경로에 대응하는 파일에 내용 작성하기
+	 * - 덮어쓰기
+	 */
+	@Test
+	public void writeFile() {
+		String helloTxtPath = samplePath + "hello.txt";
+		try(BufferedWriter bw = new BufferedWriter(new FileWriter(helloTxtPath, false))) {
+			bw.write("Hello World!");
+			bw.flush();
+			
+			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(helloTxtPath), "UTF-8"));
+			String str;
+			String resultStr = "";
+			while((str = br.readLine()) != null) {
+				resultStr = str;
+			}
+			assertTrue(resultStr.equals("Hello World!"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 절대 경로에 대응하는 파일에 내용 작성하기
+	 * - 내용 추가
+	 * - 기존 내용은 유지 : Hello World.
+	 */
+	@Test
+	public void writeFile2() {
+		String helloTxtPath = samplePath + "hello.txt";
+		try(BufferedWriter bw = new BufferedWriter(new FileWriter(helloTxtPath, true))) {
+			bw.newLine();
+			bw.write("Hello Hello Hello");
+			bw.flush();
+			
+			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(helloTxtPath), "UTF-8"));
+			String str;
+			String resultStr = "";
+			assertTrue(br.readLine().equals("Hello World."));
+			assertTrue(br.readLine().equals("Hello Hello Hello"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
