@@ -1,5 +1,6 @@
 package kr.dev_mook.file_manager.service.impl;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
@@ -9,11 +10,11 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +31,7 @@ public class FileLocalServiceImpl implements FileLocalService {
 		Path path = Paths.get(file.getPath());
 		try {
 			if(!path.toFile().exists() && path.toFile().isFile()) {
-				Files.createFile(path);
+				FileUtils.touch(path.toFile());
 				_logger.info("##### Success creation file.");
 				_logger.debug("##### Creation File Information");
 				_logger.debug("##### - Name : " + file.getName());
@@ -54,7 +55,7 @@ public class FileLocalServiceImpl implements FileLocalService {
 		Path path = Paths.get(folder.getPath());
 		try {
 			if(!path.toFile().exists() && path.toFile().isDirectory()) {
-				Files.createFile(path);
+				FileUtils.touch(path.toFile());
 				_logger.info("##### Success creation folder.");
 				_logger.debug("##### Creation Folder Information");
 				_logger.debug("##### - Name : " + folder.getName());
@@ -237,6 +238,11 @@ public class FileLocalServiceImpl implements FileLocalService {
 
 	@Override
 	public File deleteFile(String absoluteFilePath) {
+		try {
+			FileUtils.forceDelete(Paths.get(absoluteFilePath).toFile());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -249,6 +255,12 @@ public class FileLocalServiceImpl implements FileLocalService {
 
 	@Override
 	public File deleteFolder(String absoluteFolderPath) {
+		try {
+			FileUtils.deleteDirectory(Paths.get(absoluteFolderPath).toFile());
+			assertFalse(Paths.get(absoluteFolderPath).toFile().exists());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -297,6 +309,12 @@ public class FileLocalServiceImpl implements FileLocalService {
 
 	@Override
 	public File copyFile(String absoluteFilePath, String targetFolder) {
+		try {
+			String name = Paths.get(absoluteFilePath).toFile().getName();
+			FileUtils.copyFile(Paths.get(absoluteFilePath).toFile(), Paths.get(targetFolder+"\\"+name).toFile());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -309,6 +327,12 @@ public class FileLocalServiceImpl implements FileLocalService {
 
 	@Override
 	public File copyFolder(String absolutefolderPath, String targetFolder) {
+		try {
+			String name = Paths.get(absolutefolderPath).toFile().getName();
+			FileUtils.copyDirectory(Paths.get(absolutefolderPath).toFile(), Paths.get(absolutefolderPath+"\\"+name).toFile());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -321,6 +345,12 @@ public class FileLocalServiceImpl implements FileLocalService {
 
 	@Override
 	public File moveFile(String absoluteFilePath, String targetFolder) {
+		try {
+			String name = Paths.get(absoluteFilePath).toFile().getName();
+			FileUtils.moveFileToDirectory(Paths.get(absoluteFilePath).toFile(), Paths.get(targetFolder+"\\"+name).toFile(), true);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -333,6 +363,12 @@ public class FileLocalServiceImpl implements FileLocalService {
 
 	@Override
 	public File moveFolder(String absolutefolderPath, String targetFolder) {
+		try {
+			String name = Paths.get(absolutefolderPath).toFile().getName();
+			FileUtils.moveDirectoryToDirectory(Paths.get(absolutefolderPath).toFile(), Paths.get(targetFolder+"\\"+name).toFile(), true);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -345,6 +381,13 @@ public class FileLocalServiceImpl implements FileLocalService {
 
 	@Override
 	public File renameFile(String absoluteFilePath, String newName) {
+		try {
+			String name = Paths.get(absoluteFilePath).toFile().getName();
+			String folderPath = Paths.get(absoluteFilePath).toFile().getParent();
+			FileUtils.moveFile(Paths.get(absoluteFilePath).toFile(), Paths.get(folderPath+"\\"+name).toFile());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -357,6 +400,13 @@ public class FileLocalServiceImpl implements FileLocalService {
 
 	@Override
 	public File renameFolder(String absoluteFolderPath, String newName) {
+		try {
+			String name = Paths.get(absoluteFolderPath).toFile().getName();
+			String folderPath = Paths.get(absoluteFolderPath).toFile().getParent();
+			FileUtils.moveDirectory(Paths.get(absoluteFolderPath).toFile(), Paths.get(folderPath+"\\"+name).toFile());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		// TODO Auto-generated method stub
 		return null;
 	}
