@@ -11,10 +11,10 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 /**
@@ -35,7 +35,7 @@ public class FileLocalServiceImplTest {
 		try {
 			Path hello2TxtPath = Paths.get(samplePath + "hello2.txt");
 			if(!hello2TxtPath.toFile().exists()) {
-				Files.createFile(hello2TxtPath);
+				FileUtils.touch(hello2TxtPath.toFile());
 			}
 			
 			File file = new File(hello2TxtPath.toString());
@@ -55,7 +55,7 @@ public class FileLocalServiceImplTest {
 		try {
 			Path helloFolderPath = Paths.get(samplePath + "hello_dir");
 			if(!helloFolderPath.toFile().exists()) {
-				Files.createDirectory(helloFolderPath);
+				FileUtils.forceMkdir(helloFolderPath.toFile());
 			}
 			
 			File file = new File(helloFolderPath.toString());
@@ -126,8 +126,6 @@ public class FileLocalServiceImplTest {
 			bw.flush();
 			
 			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(helloTxtPath), "UTF-8"));
-			String str;
-			String resultStr = "";
 			assertTrue(br.readLine().equals("Hello World."));
 			assertTrue(br.readLine().equals("Hello Hello Hello"));
 		} catch (IOException e) {
@@ -153,7 +151,7 @@ public class FileLocalServiceImplTest {
 	}
 	
 	/**
-	 * ㅍㄹ더 존재 여부 확인 및 폴더인지 여부 확인
+	 * 폴더 존재 여부 확인 및 폴더인지 여부 확인
 	 */
 	@Test
 	public void hasFolderTest() {
@@ -165,5 +163,129 @@ public class FileLocalServiceImplTest {
 		assertTrue(hasFile);
 		assertFalse(isFile);
 		assertTrue(isDirectory);
+	}
+	
+	/**
+	 * 경로를 통한 파일 삭제
+	 */
+	@Test
+	public void deleteFile() {
+		String targetPath = samplePath + "newFolder\\hello.txt";
+		try {
+			FileUtils.forceDelete(Paths.get(targetPath).toFile());
+			assertFalse(Paths.get(targetPath).toFile().exists());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 경로를 통한 폴더 삭제
+	 * - 하위 폴더까지 같이 삭제
+	 * - FileUtils 사용
+	 */
+	@Test
+	public void deleteFolder() {
+		String targetPath = samplePath + "newFolder3";
+		try {
+			FileUtils.deleteDirectory(Paths.get(targetPath).toFile());
+			assertFalse(Paths.get(targetPath).toFile().exists());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 파일 복사 테스트 코드
+	 */
+	@Test
+	public void copyFile() {
+		try {
+			String helloTxtPath = samplePath + "hello2.txt";
+			String targetPath = samplePath + "newFolder\\hello.txt";
+			FileUtils.copyFile(Paths.get(helloTxtPath).toFile(), Paths.get(targetPath).toFile());
+			
+			assertTrue(Paths.get(targetPath).toFile().exists());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void copyFolder() {
+		String sourcePath = samplePath + "newFolder";
+		String targetPath = samplePath + "newFolder3";
+		File sourceF = new File(sourcePath);
+		File targetF = new File(targetPath);
+		
+		try {
+			FileUtils.copyDirectory(sourceF, targetF);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		assertTrue(Paths.get(targetPath).toFile().exists());
+	}
+	
+	/**
+	 * 경로를 통한 파일 이동 테스트
+	 */
+	@Test
+	public void moveFile() {
+		String sourcePath = samplePath + "newFolder\\hello2.txt";
+		String targetFolder = samplePath + "newFolder2";
+		String targetPath = samplePath + "newFolder2\\hello.txt";
+		try {
+			FileUtils.moveFileToDirectory(Paths.get(sourcePath).toFile(), Paths.get(targetFolder).toFile(), true);
+			assertTrue(Paths.get(targetPath).toFile().exists());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 경로를 통한 폴더 이동 테스트
+	 */
+	@Test
+	public void moveFolder() {
+		String sourcePath = samplePath + "newFolder";
+		String targetFolder = samplePath + "newFolder2";
+		String targetPath = samplePath + "newFolder2\\newFolder";
+		try {
+			FileUtils.moveDirectoryToDirectory(Paths.get(sourcePath).toFile(), Paths.get(targetFolder).toFile(), true);
+			assertTrue(Paths.get(targetPath).toFile().exists());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 경로를 통한 파일 이름 바꾸기
+	 */
+	@Test
+	public void renameFile() {
+		String sourcePath = samplePath + "newFolder\\hello2.txt";
+		String targetPath = samplePath + "newFolder\\hello.txt";
+		try {
+			FileUtils.moveFile(Paths.get(sourcePath).toFile(), Paths.get(targetPath).toFile());
+			assertTrue(Paths.get(targetPath).toFile().exists());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 경로를 통한 폴더 이름 바꾸기
+	 */
+	@Test
+	public void renameFolder() {
+		String sourcePath = samplePath + "newFolder22";
+		String targetPath = samplePath + "newFolder3";
+		try {
+			FileUtils.moveDirectory(Paths.get(sourcePath).toFile(), Paths.get(targetPath).toFile());
+			assertTrue(Paths.get(targetPath).toFile().exists());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
