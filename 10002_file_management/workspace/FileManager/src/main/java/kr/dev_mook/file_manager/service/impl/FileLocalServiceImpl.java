@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -17,6 +18,7 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.dev_mook.file_manager.model.File;
 import kr.dev_mook.file_manager.service.FileLocalService;
@@ -264,10 +266,30 @@ public class FileLocalServiceImpl implements FileLocalService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	// TODO
+	public void upload2(MultipartFile[] multipartFiles, String uploadFolder) {
+		for(MultipartFile multipartFile : multipartFiles) {
+			java.io.File file = new java.io.File(uploadFolder, multipartFile.getOriginalFilename());
+			try {
+				multipartFile.transferTo(file);
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 	@Override
-	public File uploadFile(File file) {
-		// TODO Auto-generated method stub
+	public File upload(File file) {
+		
+		try {
+			InputStream is = new FileInputStream(new java.io.File(file.getPath()));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
 		return null;
 	}
 

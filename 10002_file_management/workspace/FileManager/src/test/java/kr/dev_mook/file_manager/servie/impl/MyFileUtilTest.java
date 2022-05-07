@@ -1,5 +1,6 @@
 package kr.dev_mook.file_manager.servie.impl;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -13,16 +14,19 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
+
+import kr.dev_mook.file_manager.util.MyFileUtil;
 
 /**
  * FileLocalServiceImpl에 대한 테스트
  * @author Inmook, Jeong
  *
  */
-public class FileLocalServiceImplTest {
+public class MyFileUtilTest {
 	
 	private String samplePath = "C:\\Users\\jeong\\Desktop\\dev\\000000_workspaces\\100000_project\\10002_file_management\\workspace\\FileManager\\sample\\";
 	
@@ -285,6 +289,99 @@ public class FileLocalServiceImplTest {
 			FileUtils.moveDirectory(Paths.get(sourcePath).toFile(), Paths.get(targetPath).toFile());
 			assertTrue(Paths.get(targetPath).toFile().exists());
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 파일 또는 폴더 가져오기
+	 */
+	@Test
+	public void getFileOrFolder() {
+		MyFileUtil fileUtil = new MyFileUtil();
+		String prefix = "C:\\Users\\jeong\\Desktop\\dev\\000000_workspaces\\100000_project\\10002_file_management\\workspace\\FileManager\\sample\\";
+		String filePath = prefix + "hello.txt";
+		String forderPath = prefix + "newFolder";
+		try {
+			File file = fileUtil.getFile(filePath);
+			File folder = fileUtil.getFolder(forderPath);
+			assertTrue(file.exists());
+			assertTrue(folder.exists());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 파일 또는 폴더 갯수 가져오기
+	 */
+	@Test
+	public void countFilesAndFolders() {
+		MyFileUtil fileUtil = new MyFileUtil();
+		try {
+			String folderPath = "C:\\Users\\jeong\\Desktop\\dev\\000000_workspaces\\100000_project\\10002_file_management\\workspace\\FileManager\\sample";
+			int fileCnt = fileUtil.countFiles(folderPath);
+			int folderCnt = fileUtil.countFolders(folderPath);
+			assertEquals(fileCnt, 2);
+			assertEquals(folderCnt, 4);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// TODO 테스트 코드로 만들기
+	@Test
+	public void getFilesOrFolder() {
+		MyFileUtil fileUtil = new MyFileUtil();
+		File folder = new File("C:\\Users\\jeong\\Desktop\\dev\\000000_workspaces\\100000_project\\10002_file_management\\workspace\\FileManager\\sample");
+		try {
+			List<File> files = fileUtil.getFiles(folder);
+			List<File> folders = fileUtil.getFolders(folder);
+			System.out.println("fileList ----------- ");
+			for(File f : files) {
+				System.out.println(f.getName());
+			}
+			System.out.println("folderList ----------- ");
+			for(File f : folders) {
+				System.out.println(f.getName());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/*
+	 * 파일 읽기
+	 */
+	@Test
+	public void readContent() {
+		File file = new File("C:\\Users\\jeong\\Desktop\\dev\\000000_workspaces\\100000_project\\10002_file_management\\workspace\\FileManager\\sample\\hello.txt");
+		try {
+			String content = FileUtils.readFileToString(file, "UTF-8");
+			assertTrue(content.equals("helloWorld"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/*
+	 * 파일 내용 쓰기
+	 */
+	@Test
+	public void writeContent() {
+		MyFileUtil fileUtil = new MyFileUtil();
+		File file = new File("C:\\Users\\jeong\\Desktop\\dev\\000000_workspaces\\100000_project\\10002_file_management\\workspace\\FileManager\\sample\\hello.txt");
+		String str = "helloWorld";
+		try {
+			fileUtil.write(file, str, false);
+			String content1 = FileUtils.readFileToString(file, "UTF-8");
+			String expected = "Hello World!\r\nHello Hello Hello"+str;
+			assertTrue(content1.equals(expected));
+			
+			fileUtil.write(file, str, true);
+			String content2 = FileUtils.readFileToString(file, "UTF-8");
+			assertTrue(content2.equals(str));
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

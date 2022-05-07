@@ -219,7 +219,7 @@ public interface FileLocalService {
 	 * @param file
 	 * @return
 	 */
-	public File uploadFile(File file);
+	public File upload(File file);
 	
 	/**
 	 * 파일 아이디를 통한 파일 다운로드
