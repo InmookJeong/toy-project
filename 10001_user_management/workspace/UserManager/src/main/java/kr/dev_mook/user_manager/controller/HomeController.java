@@ -6,10 +6,13 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import kr.dev_mook.user_manager.dao.UserDao;
 
 /**
  * User Management Project Home Controller.
@@ -22,6 +25,13 @@ public class HomeController {
 	
 	private final Logger _logger = LoggerFactory.getLogger(HomeController.class);
 	
+	private UserDao dao;
+	
+	@Autowired
+	public void setUserDao(UserDao dao) {
+		this.dao = dao;
+	}
+	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(HttpServletRequest request, Model model, Locale locale) {
 		
@@ -29,6 +39,7 @@ public class HomeController {
 		String ip = request.getRemoteAddr();
 		
 		_logger.debug("##### Connected user's country is '" + country + "', and IP address is '" + ip + "'.");
+		dao.findAll();
 		
 		return "home";
 	}

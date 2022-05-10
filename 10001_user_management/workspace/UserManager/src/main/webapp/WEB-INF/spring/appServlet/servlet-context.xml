@@ -26,13 +26,6 @@
 	<!-- JDBC Template 등 Auto scan -->
 	<context:component-scan base-package="kr.study.dev_mook" />
 	
-	<beans:bean name="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<beans:property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
-		<beans:property name="url" value="jdbc:mysql://localhost:3306/mook_project" />
-		<beans:property name="username" value="mook_project" />
-		<beans:property name="password" value="mook0118_project" />
-	</beans:bean>
-	
 	<beans:bean name="template" class="org.springframework.jdbc.core.JdbcTemplate">
 		<!-- 위의 DataSource를 참조하도록 설정 -->
 		<beans:property name="dataSource" ref="dataSource" />

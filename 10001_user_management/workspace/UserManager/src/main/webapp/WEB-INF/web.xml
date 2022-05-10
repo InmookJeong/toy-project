@@ -13,6 +13,12 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
+	
+	<!-- Setting Context configurations -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath*:framework/spring/context-*.xml</param-value>
+	</context-param>
 
 	<!-- Processes application requests -->
 	<servlet>

@@ -8,8 +8,10 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 
+import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 
@@ -22,6 +24,9 @@ public class UserDaoImpl implements UserDao {
 	private final String JONE_ID_SOULE = "Asia/Seoul";
 	
 	public UserDaoImpl() {}
+	
+	@Autowired
+	private SqlSession _sqlSession;
 	
 	JdbcTemplate template;
 	
@@ -45,14 +50,6 @@ public class UserDaoImpl implements UserDao {
 				
 				@Override
 				public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-//					String query = "INSERT INTO user_(id, userId, password, isTempPw, name, phoneNumber, "
-//							+ "email, birth, gender, address, nation, description, status, profileImageId,"
-//							+ "createDate, modifiedDate, lastLoginDate, lastLoginIp, failedLoginAttemts,"
-//							+ "lockout, lockoutDate, emailVerified, siteTermsOfUse, userInfoTermsOfUse, eventTermsOfUse)"
-//							+ "VALUES(?, ?, ?, ?, ?, ?,"
-//							+ "?, ?, ?, ?, ?, ?, ?, ?,"
-//							+ "?, ?, ?, ?, ?,"
-//							+ "?, ?, ?, ?, ?, ?)";
 					String query = "";
 					query += "INSERT INTO user_(id, userId, password, isTempPw, name, phoneNumber, ";
 					query += "email, birth, gender, address, nation, description, status, profileImageId, ";
@@ -186,8 +183,8 @@ public class UserDaoImpl implements UserDao {
 	public List<User> findAll() {
 		_loggingOperatingTime(true);
 		
-		String query = "SELECT * FROM user_";
-		List<User> users = template.queryForList(query, User.class);
+		UserMapper _mapper = _sqlSession.getMapper(UserMapper.class);
+		List<User> users = _mapper.findAll();
 		
 		_loggingOperatingTime(false);
 		return users;

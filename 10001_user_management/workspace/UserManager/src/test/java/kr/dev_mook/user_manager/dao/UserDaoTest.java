@@ -2,6 +2,7 @@ package kr.dev_mook.user_manager.dao;
 
 import java.time.LocalDate;
 
+import org.apache.ibatis.session.SqlSession;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -9,17 +10,8 @@ import kr.dev_mook.user_manager.model.User;
 
 public class UserDaoTest {
 	
-	private UserDao dao;
-	
 	@Autowired
-	public void setUserDao(UserDao dao) {
-		this.dao = dao;
-	}
-	
-//	@Before
-//	public void setDao() {
-//		
-//	}
+	private SqlSession _sqlSession;
 	
 	@Test
 	public void createUser() {
