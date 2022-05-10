@@ -3,8 +3,406 @@
 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kr.dev_mook.user_manager.dao.impl.UserMapper">
-	<select id="findAll" resultType="kr.dev_mook.user_manager.model.User">
-		SELECT * FROM user_
+<mapper namespace="kr.dev_mook.user_manager.dao.UserMapper">
+	
+	<insert id="createUser" parameterType="kr.dev_mook.user_manager.model.User">
+		INSERT INTO user_(
+			id, userId, password, isTempPw, name, phoneNumber, 
+			email, birth, gender, address, nation, description, 
+			status, profileImageId, createDate, emailVerified, 
+			siteTermsOfUse, userInfoTermsOfUse, eventTermsOfUse
+		) VALUES (
+			#{id}, #{userId}, #{password}, #{isTempPw}, #{name}, #{phoneNumber}, 
+			#{email}, #{birth}, #{gender}, #{address}, #{nation}, #{description}, 
+			#{status}, #{profileImageId}, #{createDate}, #{emailVerified}, 
+			#{siteTermsOfUse}, #{userInfoTermsOfUse}, #{eventTermsOfUse}
+		)
+	</insert>
+	
+	<update id="updateUser" parameterType="kr.dev_mook.user_manager.model.User">
+		UPDATE
+			user_ 
+		SET
+			password = #{password},
+			isTempPw = #{isTempPw},
+			name = #{name},
+			birth = #{birth},
+			address = #{address},
+			nation = #{nation},
+			description = #{description},
+			status = #{status},
+			profileImageId = #{profileImageId},
+			modifiedDate = #{modifiedDate},
+			siteTermsOfUse = #{siteTermsOfUse},
+			userInfoTermsOfUse = #{userInfoTermsOfUse},
+			eventTermsOfUse = #{eventTermsOfUse}
+		WHERE
+			userId = #{userId}
+	</update>
+	
+	<update id="updatePassword" parameterMap="hashmap">
+		UPDATE
+			user_ 
+		SET
+			password = #{password},
+			modifiedDate = #{modifiedDate},
+		WHERE
+			userId = #{userId}
+	</update>
+	
+	<delete id="deleteUser" parameterType="long">
+		DELETE FROM
+			user_
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<delete id="deleteUser" parameterType="string">
+		DELETE FROM
+			user_
+		WHERE
+			userId = #{userId}
+	</delete>
+	
+	<select id="countAll" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM 
+			user_
 	</select>
+	
+	<select id="findAll" resultType="kr.dev_mook.user_manager.model.User">
+		SELECT 
+			* 
+		FROM 
+			user_
+	</select>
+	
+	<select id="countById" parameterType="long" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM 
+			user_ 
+		WHERE 
+			id = #{id}
+	</select>
+	
+	<select id="findById" parameterType="long" resultType="kr.dev_mook.user_manager.model.User">
+		SELECT 
+			* 
+		FROM 
+			user_ 
+		WHERE 
+			id = #{id}
+	</select>
+	
+	<select id="countByUserId" parameterType="string" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM 
+			user_ 
+		WHERE 
+			userId = #{userId}
+	</select>
+	
+	<select id="findByUserId" parameterType="string" resultType="kr.dev_mook.user_manager.model.User">
+		SELECT 
+			* 
+		FROM 
+			user_ 
+		WHERE 
+			userId = #{userId}
+	</select>
+	
+	<select id="countUsersByUserId" parameterType="string" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM 
+			user_ 
+		WHERE 
+			userId LIKE '%${userId}%'
+	</select>
+	
+	<select id="searchUsersByUserId" parameterType="map" resultType="kr.dev_mook.user_manager.model.User">
+		SELECT 
+			* 
+		FROM 
+			user_ 
+		WHERE 
+			userId LIKE '%${userId}%'
+		<!-- ORDER BY
+		LIMIT -->
+	</select>
+	
+	<select id="countUsersByName" parameterType="string" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM 
+			user_ 
+		WHERE 
+			name LIKE '%${name}%'
+	</select>
+	
+	<select id="searchUsersByName" parameterType="map" resultType="kr.dev_mook.user_manager.model.User">
+		SELECT 
+			* 
+		FROM 
+			user_ 
+		WHERE 
+			name LIKE '%${name}%'
+		<!-- ORDER BY
+		LIMIT -->
+	</select>
+	
+	<select id="countByPhoneNumber" parameterType="string" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM 
+			user_ 
+		WHERE 
+			phoneNumber = #{phoneNumber}
+	</select>
+	
+	<select id="findByPhoneNumber" parameterType="string" resultType="kr.dev_mook.user_manager.model.User">
+		SELECT 
+			* 
+		FROM 
+			user_ 
+		WHERE 
+			phoneNumber = #{phoneNumber}
+	</select>
+	
+	<select id="countByEmail" parameterType="string" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM 
+			user_ 
+		WHERE 
+			email = #{email}
+	</select>
+	
+	<select id="findByEmail" parameterType="string" resultType="kr.dev_mook.user_manager.model.User">
+		SELECT 
+			* 
+		FROM 
+			user_ 
+		WHERE 
+			email = #{email}
+	</select>
+	
+	<select id="countUsersByEmail" parameterType="string" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM 
+			user_ 
+		WHERE 
+			email LIKE '%${email}%'
+	</select>
+	
+	<select id="searchUsersByEmail" parameterType="map" resultType="kr.dev_mook.user_manager.model.User">
+		SELECT 
+			* 
+		FROM 
+			user_ 
+		WHERE 
+			email LIKE '%${email}%'
+		<!-- ORDER BY
+		LIMIT -->
+	</select>
+	
+	<select id="countUsersByGender" parameterType="string" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM 
+			user_ 
+		WHERE 
+			gender = #{gender}
+	</select>
+	
+	<select id="searchUsersByGender" parameterType="map" resultType="kr.dev_mook.user_manager.model.User">
+		SELECT 
+			* 
+		FROM 
+			user_ 
+		WHERE 
+			gender = #{gender}
+		<!-- ORDER BY
+		LIMIT -->
+	</select>
+	
+	<select id="countUsersByNation" parameterType="string" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM 
+			user_ 
+		WHERE 
+			nation = #{nation}
+	</select>
+	
+	<select id="searchUsersByNation" parameterType="map" resultType="kr.dev_mook.user_manager.model.User">
+		SELECT 
+			* 
+		FROM 
+			user_ 
+		WHERE 
+			nation = #{nation}
+		<!-- ORDER BY
+		LIMIT -->
+	</select>
+	
+	<select id="countUsersByStatus" parameterType="string" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM 
+			user_ 
+		WHERE 
+			status = #{status}
+	</select>
+	
+	<select id="searchUsersByStatus" parameterType="map" resultType="kr.dev_mook.user_manager.model.User">
+		SELECT 
+			* 
+		FROM 
+			user_ 
+		WHERE 
+			status = #{status}
+		<!-- ORDER BY
+		LIMIT -->
+	</select>
+	
+	<select id="countUsersByLockout" parameterType="boolean" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM 
+			user_ 
+		WHERE 
+			lockout = #{lockout}
+	</select>
+	
+	<select id="searchUsersByLockout" parameterType="map" resultType="kr.dev_mook.user_manager.model.User">
+		SELECT 
+			* 
+		FROM 
+			user_ 
+		WHERE 
+			lockout = #{lockout}
+		<!-- ORDER BY
+		LIMIT -->
+	</select>
+	
+	<select id="countByUserIdPassword" parameterType="map" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM 
+			user_ 
+		WHERE 
+			userId = #{userId}
+			AND password = #{password}
+	</select>
+	
+	<select id="countByNameEmail" parameterType="map" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM 
+			user_ 
+		WHERE 
+			name = #{name}
+			AND email = #{email}
+	</select>
+	
+	<select id="findByNameEmail" parameterType="map" resultType="kr.dev_mook.user_manager.model.User">
+		SELECT 
+			* 
+		FROM 
+			user_ 
+		WHERE 
+			name = #{name}
+			AND email = #{email}
+	</select>
+	
+	<select id="countUserIdByNameEmail" parameterType="map" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM 
+			user_ 
+		WHERE 
+			name = #{name}
+			AND email = #{email}
+	</select>
+	
+	<select id="findUserIdByNameEmail" parameterType="map" resultType="string">
+		SELECT 
+			userId 
+		FROM 
+			user_ 
+		WHERE 
+			name = #{name}
+			AND email = #{email}
+	</select>
+	
+	<select id="countByNamePhoneNumber" parameterType="map" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM 
+			user_ 
+		WHERE 
+			name = #{name}
+			AND phoneNumber = #{phoneNumber}
+	</select>
+	
+	<select id="findByNamePhoneNumber" parameterType="map" resultType="kr.dev_mook.user_manager.model.User">
+		SELECT 
+			* 
+		FROM 
+			user_ 
+		WHERE 
+			name = #{name}
+			AND phoneNumber = #{phoneNumber}
+	</select>
+	
+	<select id="countByNamePhoneNumber" parameterType="map" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM 
+			user_ 
+		WHERE 
+			name = #{name}
+			AND phoneNumber = #{phoneNumber}
+	</select>
+	
+	<select id="countByUserIdNameEmail" parameterType="map" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM 
+			user_ 
+		WHERE 
+			userId = #{userId}
+			AND name = #{name}
+			AND phoneNumber = #{phoneNumber}
+	</select>
+	
+	<select id="findByUserIdNameEmail" parameterType="map" resultType="kr.dev_mook.user_manager.model.User">
+		SELECT 
+			* 
+		FROM 
+			user_ 
+		WHERE 
+			userId = #{userId}
+			AND name = #{name}
+			AND phoneNumber = #{phoneNumber}
+	</select>
+	
+	<!-- <select id="">
+		TODO 검색창을 통한 검색 쿼리 구현하기
+	</select> -->
+	
+	<select id="findLatestId" resultType="long">
+		SELECT 
+			id 
+		FROM 
+			user_ 
+		ORDER BY id DESC
+		LIMIT 1
+	</select>
+	
 </mapper>
